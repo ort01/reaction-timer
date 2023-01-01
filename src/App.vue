@@ -2,21 +2,25 @@
   <h1>Reaction Timer</h1>
   <button class="play-button" @click="start" :disabled="isPlaying">Play</button>
   <button class="reset-button" @click="reset">Reset</button>
-  <Block v-if="isPlaying" :delay="delay" />
+  <Block v-if="isPlaying" :delay="delay" @end="endGame" />
+  <Results v-if="score" :score="score" />
 </template>
 
 <script>
 import Block from "./components/Block.vue";
+import Results from "./components/Results.vue";
 
 export default {
   name: "App",
   components: {
     Block,
+    Results,
   },
   data: () => {
     return {
       isPlaying: false,
       delay: null,
+      score: null,
     };
   },
   methods: {
@@ -26,6 +30,10 @@ export default {
     },
     reset() {
       this.isPlaying = false;
+      this.score = null;
+    },
+    endGame(reactionTime) {
+      this.score = reactionTime;
     },
   },
 };
@@ -39,6 +47,10 @@ export default {
   text-align: center;
   color: #444;
   margin-top: 60px;
+}
+h1 {
+  font-size: 2.9rem;
+  text-shadow: 2px 2px 4px #0faf8796;
 }
 .play-button,
 .reset-button {
@@ -81,8 +93,10 @@ export default {
   height: 200%;
 }
 .play-button:disabled {
-  color: rgba(68, 68, 68, 0.301);
-  border: 2px solid rgba(68, 68, 68, 0.301);
+  color: rgb(68, 68, 68);
+  border: 2px solid rgb(68, 68, 68);
+  opacity: 0.3;
+  cursor: not-allowed;
 }
 .play-button:disabled:before {
   background: none;
